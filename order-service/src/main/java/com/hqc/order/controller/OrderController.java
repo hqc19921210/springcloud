@@ -1,31 +1,35 @@
 package com.hqc.order.controller;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+import com.hqc.order.feign.LogService;
+import com.hqc.order.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by Administrator on 2021/5/30.
+ * Created by Administrator on 2021/6/1.
  */
 @RestController
-@RequestMapping("/api/order")
-@RefreshScope
+@RequestMapping("/order/api")
 public class OrderController {
 
-    @GetMapping("/list")
-    public String getList(){
-        return "List";
+    @Autowired
+    private OrderService orderService;
+
+
+
+    @RequestMapping("/creation/{productionId}/{num}")
+    public String order(@PathVariable String productionId ,@PathVariable int num){
+        return orderService.createOrder(productionId, num);
     }
 
 
-    @Value("${aaa:false}")
-    private boolean aaa;
 
-    @RequestMapping("/aaa")
-    public String get() {
-        return String.valueOf(aaa);
+    @GetMapping("/list")
+    public String getList(){
+        return "list";
     }
 
 }
